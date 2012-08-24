@@ -7,7 +7,6 @@ import java.util.Date;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 public class EDTCMBXmlParser {
@@ -40,16 +39,35 @@ public class EDTCMBXmlParser {
 		return date;
 	}
 	
-	public ArrayList<String> GetCurrecyList(){
-		ArrayList<String> currencyList=new ArrayList<String>();
+	public ArrayList<TCMBCurrency> GetCurrecies(){
+		ArrayList<TCMBCurrency> currencyList=new ArrayList<TCMBCurrency>();
 		
 		NodeList nList=_xmlDoc.getElementsByTagName("Currency");
 		for (int i = 0; i < nList.getLength(); i++) {
-			Element currency=(Element)nList.item(i);
-			currencyList.add(getTextValue(currency,"Isim"));			
+			Element currencyElement=(Element)nList.item(i);
+			TCMBCurrency currency=new TCMBCurrency();
+			currency.setBanknoteBuying(getDoubleValue(currencyElement, "BanknoteBuying"));
+			currency.setBanknoteSelling(getDoubleValue(currencyElement, "BanknoteSelling"));
+			currency.setCrossRateEuro(getDoubleValue(currencyElement, "CrossRateEuro"));
+			currency.setCrossRateOther(getDoubleValue(currencyElement, "CrossRateOther"));
+			currency.setCrossRateUSD(getDoubleValue(currencyElement, "CrossRateUSD"));
+			currency.setCurrencyCode(getTextValue(currencyElement, "CurrencyCode"));
+			currency.setCurrencyName(getTextValue(currencyElement, "CurrencyName"));
+			currency.setForexBuying(getDoubleValue(currencyElement, "ForexBuying"));
+			currency.setForexSelling(getDoubleValue(currencyElement, "ForexSelling"));
+			currency.setIsim(getTextValue(currencyElement, "Isim"));
+			currency.setUnit(getIntValue(currencyElement, "Unit"));
+			
+			currencyList.add(currency);
 		}
 		
 		return currencyList;
+	}
+	
+	public ArrayList<String[]> GetCurrencyCodeNameList(){
+		ArrayList<String[]> result=new ArrayList<String[]>();
+		
+		return result;
 	}
 	
 	private String getTextValue(Element ele, String tagName) {
@@ -57,10 +75,41 @@ public class EDTCMBXmlParser {
 		NodeList nl = ele.getElementsByTagName(tagName);
 		if(nl != null && nl.getLength() > 0) {
 			Element el = (Element)nl.item(0);
-			textVal = el.getFirstChild().getNodeValue();
+			if(el.getFirstChild()!=null)
+				textVal = el.getFirstChild().getNodeValue();
+			else
+				textVal=null;
 		}
 
 		return textVal;
+	}
+	
+	private double getDoubleValue(Element ele, String tagName) {
+		double doubleVal = 0;
+		NodeList nl = ele.getElementsByTagName(tagName);
+		if(nl != null && nl.getLength() > 0) {
+			Element el = (Element)nl.item(0);
+			if(el.getFirstChild()!=null)
+				doubleVal = Double.parseDouble(el.getFirstChild().getNodeValue());
+			else
+				doubleVal=-1;
+		}
+
+		return doubleVal;
+	}
+	
+	private int getIntValue(Element ele, String tagName) {
+		int intVal = 0;
+		NodeList nl = ele.getElementsByTagName(tagName);
+		if(nl != null && nl.getLength() > 0) {
+			Element el = (Element)nl.item(0);
+			if(el.getFirstChild()!=null)
+				intVal = Integer.parseInt(el.getFirstChild().getNodeValue());
+			else
+				intVal=-1;
+		}
+
+		return intVal;
 	}
 	
 	

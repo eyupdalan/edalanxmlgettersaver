@@ -19,9 +19,9 @@ public class TestClasses {
 		System.out.println();
 		System.out.println("________________________________");
 		System.out.println();
-		ArrayList<String> currencyList = tcmb.GetCurrecyList();
+		ArrayList<TCMBCurrency> currencyList = tcmb.GetCurrecies();
 		for (int i = 0; i < currencyList.size(); i++) {
-			System.out.println(currencyList.get(i));
+			System.out.println(currencyList.get(i).Isim);
 		}
 	}
 }
