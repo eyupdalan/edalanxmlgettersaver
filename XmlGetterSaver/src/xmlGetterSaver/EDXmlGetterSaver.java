@@ -41,6 +41,11 @@ public class EDXmlGetterSaver {
 		setXmlUrl(_xmlUrl);
 	}
 	
+	public EDXmlGetterSaver(String _xmlUrl,String _xmlLocalPath){
+		setXmlUrl(_xmlUrl);
+		setXmlLocalPath(_xmlLocalPath);
+	}
+	
 	public void GetXmlFromUrl(){
 		try{
 			DocumentBuilder db=DocumentBuilderFactory.newInstance().newDocumentBuilder();
